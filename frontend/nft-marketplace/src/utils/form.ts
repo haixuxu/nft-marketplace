@@ -1,20 +1,17 @@
-import { CID } from 'ipfs-http-client';
-
 const getMintDetails = (attributesValue?: { key: string; value: string }[], rarity?: string) => {
   const attributes = attributesValue?.reduce((accumulator, { key, value }) => ({ ...accumulator, [key]: value }), {});
 
   return JSON.stringify({ attributes, rarity });
 };
 
-const getMintPayload = (name: string, description: string, imgCid: CID, detailsCid?: CID) => {
+const getMintPayload = (name: string, description: string, imgCid: string, detailsCid?: string) => {
   const tokenMetadata = {
     name,
     description,
-    media: imgCid.toString(),
-    reference: detailsCid ? detailsCid.toString() : '',
+    media: imgCid,
+    reference: detailsCid || '',
   };
 
-  // TODO: drop transaction id
   return { Mint: { tokenMetadata, transaction_id: Math.floor(Math.random() * 1000) } };
 };
 

@@ -6,7 +6,6 @@ import {
 import { Alert, alertStyles } from '@gear-js/ui';
 import { ComponentType, ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { HeliaProvider } from 'context';
 import { ADDRESS } from 'consts';
 
 type Props = {
@@ -25,7 +24,7 @@ function AlertProvider({ children }: Props) {
   );
 }
 
-const providers = [BrowserRouter, AlertProvider, HeliaProvider, ApiProvider, AccountProvider];
+const providers = [BrowserRouter, AlertProvider, ApiProvider, AccountProvider];
 
 function withProviders(Component: ComponentType) {
   return () => providers.reduceRight((children, Provider) => <Provider>{children}</Provider>, <Component />);

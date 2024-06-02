@@ -3,6 +3,8 @@ import { ADDRESS, LOCAL_STORAGE } from 'consts';
 import { getMintDetails, getMintPayload } from './form';
 import { getAuctionDate, getListingProps, getNFTProps } from './nft';
 
+export * from './ipfs';
+
 const isLoggedIn = ({ address }: InjectedAccountWithMeta) => localStorage[LOCAL_STORAGE.ACCOUNT] === address;
 
 const isHex = (value: unknown) => {
@@ -15,14 +17,4 @@ const getIpfsAddress = (cid: string) => `${ADDRESS.IPFS_GATEWAY}/${cid}`;
 
 const getMilliseconds = (value: string) => Number(value) * 60000;
 
-export {
-  isLoggedIn,
-  isHex,
-  getMintDetails,
-  getMintPayload,
-  getIpfsAddress,
-  getNFTProps,
-  getAuctionDate,
-  getListingProps,
-  getMilliseconds,
-};
+export { isLoggedIn, isHex, getMintDetails, getMintPayload, getIpfsAddress, getNFTProps, getAuctionDate, getListingProps, getMilliseconds };

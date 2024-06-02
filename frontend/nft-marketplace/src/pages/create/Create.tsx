@@ -1,7 +1,8 @@
 import { Button, Checkbox, FileInput, Input, Textarea } from '@gear-js/ui';
 import plus from 'assets/images/form/plus.svg';
-import { useIPFS, useNftMessage } from 'hooks';
-import { getMintDetails, getMintPayload } from 'utils';
+import { useNftMessage } from 'hooks';
+import { useAlert } from '@gear-js/react-hooks';
+import { getMintDetails, getMintPayload, ipfsUpload, ipfsCrustPins, stringToFile } from 'utils';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
@@ -27,7 +28,7 @@ function Create() {
   const { fields, append, remove } = useFieldArray({ control, name: 'attributes' });
   const { errors } = formState;
 
-  const ipfs = useIPFS();
+  const alert = useAlert();
   const sendMessage = useNftMessage();
 
   const [isAnyAttribute, setIsAnyAttribute] = useState(false);
@@ -63,13 +64,23 @@ function Create() {
 
     const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
 
-    
-    ipfs
-      .add(image)
-      .then(({ cid }) => cid)
-      .then(async (imageCid) => (details ? { detailsCid: (await ipfs.add(details)).cid, imageCid } : { imageCid }))
-      .then(({ imageCid, detailsCid }) => getMintPayload(name, description, imageCid, detailsCid))
-      .then((payload) => sendMessage({ payload, onSuccess: resetForm }));
+    try {
+      const { Hash, Name: fileName1 } = await ipfsUpload(image);
+
+      await ipfsCrustPins(Hash);
+
+      let detailsCid = '';
+      if (details) {
+        const txtfile = stringToFile(details, 'detail.txt', 'plain/text');
+        const ret2 = await ipfsUpload(txtfile);
+        await ipfsCrustPins(ret2.Hash);
+        detailsCid = ret2.Hash;
+      }
+      const payload = getMintPayload(name, description, Hash, detailsCid ? detailsCid : '');
+      await sendMessage({ payload, onSuccess: resetForm });
+    } catch (error) {
+      alert.error((error as Error).message);
+    }
   };
 
   return (
@@ -83,11 +94,7 @@ function Create() {
           </div>
 
           <div className={styles.item}>
-            <Textarea
-              label="Description"
-              className={styles.input}
-              {...register('description', { required: 'Description is required' })}
-            />
+            <Textarea label="Description" className={styles.input} {...register('description', { required: 'Description is required' })} />
             <p className={styles.error}>{errors.description?.message}</p>
           </div>
 
@@ -95,9 +102,7 @@ function Create() {
             <div className={styles.item}>
               <Checkbox label="Attributes" checked={isAnyAttribute} onChange={toggleAttributes} />
               {isAnyAttribute && <Button icon={plus} color="transparent" onClick={() => append(defaultAttributes)} />}
-              <p className={clsx(styles.error, styles.checkboxError)}>
-                {(errors.attributes?.[0]?.key || errors.attributes?.[0]?.value) && 'Enter attributes'}
-              </p>
+              <p className={clsx(styles.error, styles.checkboxError)}>{(errors.attributes?.[0]?.key || errors.attributes?.[0]?.value) && 'Enter attributes'}</p>
             </div>
           </div>
           {isAnyAttribute && <Attributes register={register} fields={fields} onRemoveButtonClick={remove} />}
@@ -115,12 +120,7 @@ function Create() {
           )}
 
           <div className={styles.item}>
-            <FileInput
-              label="Image"
-              className={styles.input}
-              accept={IMAGE_FILE_TYPES.join(', ')}
-              {...register('image', { validate: validateImage })}
-            />
+            <FileInput label="Image" className={styles.input} accept={IMAGE_FILE_TYPES.join(', ')} {...register('image', { validate: validateImage })} />
             <p className={styles.error}>{errors.image?.message}</p>
           </div>
           <Button type="submit" text="Create" className={styles.button} block />

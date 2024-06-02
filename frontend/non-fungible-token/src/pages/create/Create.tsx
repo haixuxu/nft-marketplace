@@ -4,8 +4,8 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import plus from 'assets/images/form/plus.svg';
-import { useHelia, useSendNFTMessage } from 'hooks';
-import { getMintDetails, getMintPayload, readFileAsUint8Array } from 'utils';
+import { useSendNFTMessage } from 'hooks';
+import { getMintDetails, getMintPayload, ipfsCrustPins,ipfsUpload,stringToFile } from 'utils';
 import { Attributes } from './attributes';
 import styles from './Create.module.scss';
 
@@ -29,7 +29,6 @@ function Create() {
   const { errors } = formState;
 
   const alert = useAlert();
-  const { fs } = useHelia();
   const sendMessage = useSendNFTMessage();
 
   const [isAnyAttribute, setIsAnyAttribute] = useState(false);
@@ -64,23 +63,23 @@ function Create() {
     const image = data.image[0];
 
     const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
+    try {
+      const { Hash,Name:fileName1 } = await ipfsUpload(image);
 
-    const fileBytes = await readFileAsUint8Array(image);
-    // add the bytes to your node and receive a unique content identifier
-    let imageCid = await fs.addBytes(fileBytes);
-    imageCid = imageCid.toString();
+      await ipfsCrustPins(Hash);
 
-    const encoder = new TextEncoder();
-    let detailsCid = '';
-    if (details) {
-      detailsCid = await fs.addBytes(encoder.encode(details));
-      detailsCid = detailsCid.toString();
+      let detailsCid = '';
+      if (details) {
+        const txtfile = stringToFile(details,"detail.txt","plain/text");
+        const ret2 = await ipfsUpload(txtfile);
+        await ipfsCrustPins(ret2.Hash);
+        detailsCid = ret2.Hash;
+      }
+      const payload = getMintPayload(name, description, Hash, detailsCid ? detailsCid : '');
+      await sendMessage({ payload, onSuccess: resetForm });
+    } catch (error) {
+      alert.error((error as Error).message);
     }
-    console.log('Added image  file:', imageCid);
-    console.log('Added detail file:', detailsCid);
-
-    const payload = getMintPayload(name, description, imageCid, detailsCid);
-    await sendMessage({ payload, onSuccess: resetForm }).catch(({ message }: Error) => alert.error(message));
   };
 
   return (
