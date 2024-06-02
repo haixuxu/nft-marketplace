@@ -1,0 +1,13 @@
+{
+  "name": "marketplace-frontend",
+  "version": "1.0.2",
+  "private": true,
+  "packageManager": "yarn@4.0.1",
+  "scripts": {
+    "build:error-tracking": "yarn workspace @dapps-frontend/error-tracking build",
+    "build:packages": "yarn build:error-tracking"
+  },
+  "workspaces": [
+    "frontend/*"
+  ]
+}
