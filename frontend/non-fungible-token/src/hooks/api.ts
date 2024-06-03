@@ -2,8 +2,8 @@ import { useAccount, useReadWasmState, useSendMessageWithGas } from '@gear-js/re
 import { ADDRESS } from 'consts';
 import { Params, Token } from 'types';
 import { useParams } from 'react-router-dom';
-import stateMetaWasm from 'assets/wasm/nft_state.meta.wasm';
-import metaTxt from 'assets/meta/nft_meta.txt';
+import stateMetaWasm from 'assets/wasm/state.meta.wasm';
+import metaTxt from 'assets/meta/meta.txt';
 import { useMetadata, useWasmMetadata } from './useMetadata';
 
 function useNFTMetadata() {
