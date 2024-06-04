@@ -7,7 +7,7 @@ COPY /frontend/yarn.lock .
 COPY /frontend/.yarnrc.yml .
 COPY /frontend/.yarn/releases .yarn/releases
 
-COPY ./frontend/apps/nft-marketplace ./apps/nft-marketplace
+COPY ./frontend/nft-marketplace ./apps/nft-marketplace
 COPY ./frontend/packages ./packages
 
 RUN apk update
@@ -28,7 +28,7 @@ ENV REACT_APP_NODE_ADDRESS=${REACT_APP_NODE_ADDRESS} \
     REACT_APP_SENTRY_DSN=${REACT_APP_SENTRY_DSN} \
     DISABLE_ESLINT_PLUGIN=true
 
-WORKDIR /frontend/apps/nft-marketplace
+WORKDIR /frontend/nft-marketplace
 
 RUN yarn install
 
@@ -36,4 +36,4 @@ RUN yarn build
 
 RUN npm install --global serve
 
-CMD ["serve", "-s", "/frontend/apps/nft-marketplace/build"]
+CMD ["serve", "-s", "/frontend/nft-marketplace/build"]

@@ -22,7 +22,7 @@ module.exports = {
     'react/require-default-props': 'off', // we don't use prop-types
 
     'import/prefer-default-export': 'off', // force named exports
-    'import/no-default-export': 'error',
+    // 'import/no-default-export': 'error',
 
     '@typescript-eslint/no-unused-vars': 'warn', // 'error' is not convinient in development
 

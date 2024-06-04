@@ -45,7 +45,6 @@ function useMergedNFTs() {
       })
       .catch(({ message }: Error) => alert.error(message));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, marketNFTs]);
 
   return { NFTs, isEachNFTRead };
@@ -91,7 +90,6 @@ function useMergedOwnerNFTs() {
       })
       .catch(({ message }: Error) => alert.error(message));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, ownerNFTs, marketplaceStateBuffer, marketplaceStateMetadata]);
 
   return { NFTs, isEachNFTRead };

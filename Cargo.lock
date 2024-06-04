@@ -1321,6 +1321,46 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d6ef0072f8a535281e4876be788938b528e9a1d43900b82c2569af7da799125"
 
 [[package]]
+name = "dynamic-nft"
+version = "1.1.0"
+dependencies = [
+ "dynamic-nft-io",
+ "gclient",
+ "gear-lib-derive",
+ "gear-lib-old",
+ "gear-wasm-builder",
+ "gmeta",
+ "gstd",
+ "gtest",
+ "hex-literal",
+ "primitive-types",
+ "sp-core 22.0.0",
+ "sp-core-hashing 10.0.0",
+ "tokio",
+]
+
+[[package]]
+name = "dynamic-nft-io"
+version = "1.1.0"
+dependencies = [
+ "gear-lib-old",
+ "gmeta",
+ "gstd",
+ "primitive-types",
+]
+
+[[package]]
+name = "dynamic-nft-state"
+version = "1.1.0"
+dependencies = [
+ "dynamic-nft-io",
+ "gear-lib-old",
+ "gear-wasm-builder",
+ "gmeta",
+ "gstd",
+]
+
+[[package]]
 name = "dynasm"
 version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"

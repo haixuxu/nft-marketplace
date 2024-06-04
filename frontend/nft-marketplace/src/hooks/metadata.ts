@@ -15,7 +15,6 @@ function useBuffer(source: string) {
       .then((result) => setBuffer(result))
       .catch(({ message }: Error) => alert.error(message));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return buffer;
@@ -34,7 +33,6 @@ function useProgramMetadata(source: string) {
       .then((result) => setMetadata(result))
       .catch(({ message }: Error) => alert.error(message));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return metadata;
@@ -52,7 +50,6 @@ function useStateMetadata(wasm: Buffer | undefined) {
       .then((result) => setStateMetadata(result))
       .catch(({ message }: Error) => alert.error(message));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasm]);
 
   return stateMetadata;

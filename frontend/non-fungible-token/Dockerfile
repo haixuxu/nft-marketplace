@@ -8,7 +8,7 @@ COPY /frontend/yarn.lock .
 COPY /frontend/.yarnrc.yml .
 COPY /frontend/.yarn/releases .yarn/releases
 
-COPY ./frontend/apps/non-fungible-token ./apps/non-fungible-token
+COPY ./frontend/non-fungible-token ./apps/non-fungible-token
 COPY ./frontend/packages ./packages
 
 RUN apk update
@@ -28,7 +28,7 @@ ENV REACT_APP_NODE_ADDRESS=${REACT_APP_NODE_ADDRESS} \
     DISABLE_ESLINT_PLUGIN=true
 
 
-WORKDIR /frontend/apps/non-fungible-token
+WORKDIR /frontend/non-fungible-token
 
 RUN yarn install
 
@@ -36,4 +36,4 @@ RUN yarn build
 
 RUN npm install --global serve
 
-CMD ["serve", "-s", "/frontend/apps/non-fungible-token/build"]
+CMD ["serve", "-s", "/frontend/non-fungible-token/build"]
