@@ -5,12 +5,14 @@ import { AddMinter } from './addminter';
 import { Create } from './create';
 import { Home } from './home';
 import { NFT } from './nft';
+import { Ticket } from './ticket';
 
 const routes = [
   { path: '/', Page: Home },
   { path: 'nft/:id', Page: NFT },
   { path: 'create', Page: Create, isPrivate: true },
   { path: 'addminter', Page: AddMinter, isPrivate: true },
+  { path: 'mint_ticket', Page: Ticket, isPrivate: true },
 ];
 
 function Routing() {

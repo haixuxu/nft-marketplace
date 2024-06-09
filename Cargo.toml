@@ -3,6 +3,8 @@ resolver = "2"
 # Keep in the lexicographic order!
 # Remove a member if it's used as a dependency in the workspace.
 members = [
+    "contracts/fungible-token",
+    "contracts/fungible-token/state",
     "contracts/dynamic-nft",
     "contracts/dynamic-nft/state",
     "contracts/nft-marketplace",
@@ -25,6 +27,7 @@ publish = false
 
 [workspace.dependencies]
 
+fungible-token-io.path = "contracts/fungible-token/io"
 
 sharded-fungible-token.path = "contracts/sharded-fungible-token"
 sharded-fungible-token-logic.path = "contracts/sharded-fungible-token/logic"

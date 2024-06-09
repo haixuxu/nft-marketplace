@@ -10,6 +10,9 @@ function Menu() {
       <li>
         <Link to="/create">Create NFT</Link>
       </li>
+      <li>
+        <Link to="/mint_ticket">AirDrop NFT Ticket</Link>
+      </li>
     </ul>
   );
 }

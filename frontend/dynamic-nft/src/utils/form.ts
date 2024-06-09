@@ -19,4 +19,5 @@ const getAddMintPayload = (address: string) => {
   return { AddMinter: { minter_id: address, transaction_id: Math.floor(Math.random() * 1000_1000) } };
 };
 
+
 export { getMintDetails, getMintPayload, getAddMintPayload };
