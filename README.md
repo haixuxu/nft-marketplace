@@ -69,3 +69,4 @@ b3e7f698d16800a56c782e2c5aa4ac23  ./target/wasm32-unknown-unknown/release//fungi
 e48b9e030feda7139894a196f0de1807  ./target/wasm32-unknown-unknown/release//non_fungible_token.wasm
 22a607a7085d3a2a44959b339de65f3d  ./target/wasm32-unknown-unknown/release//non_fungible_token.meta.txt
 6dd8a8d5752a2cce66df8461b311bc28  ./target/wasm32-unknown-unknown/release//dynamic_nft.wasm
+

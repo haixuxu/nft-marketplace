@@ -14,7 +14,6 @@ type Token = {
   reference: string;
 };
 
-
 type Attributes = {
   [key: string]: string;
 };
@@ -24,4 +23,10 @@ type TokenDetails = {
   attributes?: Attributes;
 };
 
-export type { Params, Token, Attributes, TokenDetails };
+type ImageItem = {
+  link: string;
+  name: string;
+  desc: string;
+};
+
+export type { Params, Token, Attributes, TokenDetails, ImageItem };

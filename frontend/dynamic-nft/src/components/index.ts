@@ -5,6 +5,7 @@ import { OnLogin } from './on-login';
 import { InfoText } from './info-text';
 import { Footer } from './footer';
 
+export * from './image';
 export * from './attributes';
 
 export { Header,Footer, AddressModal, ConfirmationModal, ApiLoader, Loader, OnLogin, InfoText };

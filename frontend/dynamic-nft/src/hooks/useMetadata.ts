@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ProgramMetadata } from '@gear-js/api';
 import { Buffer } from 'buffer';
 import { useAlert } from '@gear-js/react-hooks';
+// import { fetchData } from 'utils';
 
 export const useMetadata = (source: RequestInfo | URL) => {
   const [data, setData] = useState<ProgramMetadata>();

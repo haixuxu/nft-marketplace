@@ -8,6 +8,7 @@ publish.workspace = true
 gstd.workspace = true
 primitive-types.workspace = true
 dynamic-nft-io.workspace = true
+fungible-token-io.workspace = true
 gear-lib-old.workspace = true
 gear-lib-derive.workspace = true
 sp-core-hashing.workspace = true

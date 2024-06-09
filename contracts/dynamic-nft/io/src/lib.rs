@@ -28,7 +28,8 @@ pub struct Config {
 pub struct InitNFT {
     pub collection: Collection,
     pub royalties: Option<Royalties>,
-    pub config: Config,
+    // pub config: Config,
+    pub ref_contract: ActorId,
 }
 
 #[derive(Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
@@ -95,10 +96,10 @@ pub enum NFTAction {
     Clear {
         transaction_hash: H256,
     },
-    AddMinter {
-        transaction_id: u64,
-        minter_id: ActorId,
-    },
+    // AddMinter {
+    //     transaction_id: u64,
+    //     minter_id: ActorId,
+    // },
     UpdateDynamicData {
         transaction_id: u64,
         data: Vec<u8>,
@@ -113,6 +114,9 @@ pub enum NFTEvent {
     TransferPayout(NFTTransferPayout),
     NFTPayout(Payout),
     Approval(NFTApproval),
+    Clear{
+        operator:ActorId
+    },
     Owner {
         owner: ActorId,
         token_id: TokenId,
@@ -151,6 +155,7 @@ pub struct IoNFT {
     pub token: IoNFTState,
     pub token_id: TokenId,
     pub owner: ActorId,
+    pub ref_contract: ActorId,
     pub transactions: Vec<(H256, NFTEvent)>,
     pub dynamic_data: Vec<u8>,
 }

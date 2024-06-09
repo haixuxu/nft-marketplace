@@ -4,6 +4,7 @@ use fungible_token_io::*;
 use gstd::{
     collections::HashMap, errors::Result as GstdResult, msg, prelude::*, ActorId, MessageId,
 };
+use ops::Mul;
 
 #[cfg(test)]
 mod tests;
@@ -49,32 +50,46 @@ impl FungibleToken {
         )
         .unwrap();
     }
-    fn airdrop(&mut self,recipients:Vec<ActorId>, amount: u128){
+    fn airdrop(&mut self, recipients: Vec<ActorId>, amount: u128) {
         self.check_config();
         let source = msg::source();
-        if recipients.len()==0{
+        if recipients.len() == 0 {
             panic!("air drop recipients is must be have one element")
         }
-        if amount==0 {
+        if amount == 0 {
             panic!("airdrop amount is must be lg zero")
         }
-        if !self.can_transfer(from, amount*recipients.len()) {
-            panic!("balance is not enough for airdrop")
+        if !self.can_transfer(&source, amount.mul(recipients.len() as u128)) {
+            panic!("balance is not enough for airdrop!")
         }
         for target in recipients.iter() {
-             self.transfer(&source, target, amount,true)
+            self.transfer(&source, target, amount, true)
         }
+        msg::reply(FTEvent::AirDrop { recipients, amount }, 0).unwrap();
+    }
+    fn burn_from(&mut self, from:ActorId, amount: u128) {
+        self.check_config();
+        if self.balances.get(&from).unwrap_or(&0) < &amount {
+            panic!("Amount exceeds account balance");
+        }
+        self.balances
+            .entry(from)
+            .and_modify(|balance| *balance -= amount);
+        self.total_supply -= amount;
+
         msg::reply(
-            FTEvent::AirDrop {
-                recipients,
-                amount
+            FTEvent::BurnFrom {
+                from: from,
+                amount,
             },
             0,
         )
         .unwrap();
     }
+
     /// Executed on receiving `fungible-token-messages::BurnInput`.
     fn burn(&mut self, amount: u128) {
+        self.check_config();
         let source = msg::source();
         if self.balances.get(&source).unwrap_or(&0) < &amount {
             panic!("Amount exceeds account balance");
@@ -96,7 +111,7 @@ impl FungibleToken {
     }
     /// Executed on receiving `fungible-token-messages::TransferInput` or `fungible-token-messages::TransferFromInput`.
     /// Transfers `amount` tokens from `sender` account to `recipient` account.
-    fn transfer(&mut self, from: &ActorId, to: &ActorId, amount: u128, is_drop:bool) {
+    fn transfer(&mut self, from: &ActorId, to: &ActorId, amount: u128, is_drop: bool) {
         if from == &ZERO_ID || to == &ZERO_ID {
             panic!("Zero addresses");
         };
@@ -113,7 +128,7 @@ impl FungibleToken {
             .entry(*to)
             .and_modify(|balance| *balance += amount)
             .or_insert(amount);
-        if is_drop ==false {
+        if is_drop == false {
             msg::reply(
                 FTEvent::Transfer {
                     from: *from,
@@ -128,10 +143,13 @@ impl FungibleToken {
 
     /// Executed on receiving `fungible-token-messages::ApproveInput`.
     fn approve(&mut self, to: &ActorId, amount: u128) {
-        if to == &ZERO_ID {
+        if to.is_zero() {
             panic!("Approve to zero address");
         }
         let source = msg::source();
+        if to.eq(&source) {
+            panic!("Approve for source is invalid!");
+        }
         self.allowances
             .entry(source)
             .or_default()
@@ -163,7 +181,6 @@ impl FungibleToken {
         false
     }
     fn check_config(&self) {
-
         let current_minter = msg::source();
         let is_authorized_minter = self
             .authorized_minters
@@ -188,7 +205,7 @@ fn common_state() -> IoFungibleToken {
         balances,
         allowances,
         decimals,
-        authorized_minters:_,
+        authorized_minters,
     } = state.clone();
 
     let balances = balances.iter().map(|(k, v)| (*k, *v)).collect();
@@ -203,6 +220,7 @@ fn common_state() -> IoFungibleToken {
         balances,
         allowances,
         decimals,
+        authorized_minters
     }
 }
 
@@ -211,7 +229,7 @@ fn static_mut_state() -> &'static mut FungibleToken {
 }
 
 #[no_mangle]
-extern fn state() {
+extern "C" fn state() {
     reply(common_state())
         .expect("Failed to encode or reply with `<AppMetadata as Metadata>::State` from `state()`");
 }
@@ -221,25 +239,16 @@ fn reply(payload: impl Encode) -> GstdResult<MessageId> {
 }
 
 #[no_mangle]
-extern fn handle() {
+extern "C" fn handle() {
     let action: FTAction = msg::load().expect("Could not load Action");
     let ft: &mut FungibleToken = unsafe { FUNGIBLE_TOKEN.get_or_insert(Default::default()) };
     match action {
-        FTAction::Mint(amount) => {
-            ft.mint(amount);
-        }
-        FTAction::AirDrop { recipients, amount }=>{
-            ft.airdrop(recipients, amount)
-        }
-        FTAction::Burn(amount) => {
-            ft.burn(amount);
-        }
-        FTAction::Transfer { from, to, amount } => {
-            ft.transfer(&from, &to, amount,false);
-        }
-        FTAction::Approve { to, amount } => {
-            ft.approve(&to, amount);
-        }
+        FTAction::Mint(amount) => ft.mint(amount),
+        FTAction::AirDrop { recipients, amount } => ft.airdrop(recipients, amount),
+        FTAction::Burn(amount) => ft.burn(amount),
+        FTAction::BurnFrom { from, amount }=> ft.burn_from(from, amount),
+        FTAction::Transfer { from, to, amount } => ft.transfer(&from, &to, amount, false),
+        FTAction::Approve { to, amount } => ft.approve(&to, amount),
         FTAction::TotalSupply => {
             msg::reply(FTEvent::TotalSupply(ft.total_supply), 0).unwrap();
         }
@@ -247,12 +256,22 @@ extern fn handle() {
             let balance = ft.balances.get(&account).unwrap_or(&0);
             msg::reply(FTEvent::Balance(*balance), 0).unwrap();
         }
+        FTAction::AddMinter { minter_id } => {
+            ft.check_config();
+            ft.authorized_minters.push(minter_id);
+
+            msg::reply(FTEvent::MinterAdded { minter_id }, 0)
+                .expect("Error during replying with `NFTEvent::Approval`");
+        }
     }
 }
 
 #[no_mangle]
-extern fn init() {
+extern "C" fn init() {
     let config: InitConfig = msg::load().expect("Unable to decode InitConfig");
+    if config.authorized_minters.len() == 0 {
+        panic!("Init authorized_minters is required");
+    }
     let ft = FungibleToken {
         name: config.name,
         symbol: config.symbol,

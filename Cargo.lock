@@ -1325,6 +1325,7 @@ name = "dynamic-nft"
 version = "1.1.0"
 dependencies = [
  "dynamic-nft-io",
+ "fungible-token-io",
  "gclient",
  "gear-lib-derive",
  "gear-lib-old",

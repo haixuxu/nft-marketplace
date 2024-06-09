@@ -1,12 +1,14 @@
 import { useAccount, useReadWasmState, useSendMessageWithGas } from '@gear-js/react-hooks';
 import { ADDRESS } from 'consts';
-import stateMetaWasm from 'contracts/fungible_token_state.meta.wasm';
-import metaTxt from 'contracts/fungible_token.meta.txt';
 import { useMetadata, useWasmMetadata } from './useMetadata';
+import ftTicketStateMeta from 'contracts/fungible_token_state.meta.wasm';
+import ftTicketMetaTxt from 'contracts/fungible_token.meta.txt';
+// const ftTicketWasm = '/static/fungible_token_state.meta.wasm';
+const ftMetaTxt = "/static/fungible_token.meta.txt";
 
 function useTicketState<T>(functionName: string, argument?: any) {
-  const { buffer } = useWasmMetadata(stateMetaWasm);
-  const programMetadata = useMetadata(metaTxt);
+  const { buffer } = useWasmMetadata(ftTicketStateMeta);
+  const programMetadata = useMetadata(ftTicketMetaTxt);
 
   const result = useReadWasmState<T>({
     programId: ADDRESS.TICKET_CONTRACT_ADDRESS,
@@ -21,7 +23,7 @@ function useTicketState<T>(functionName: string, argument?: any) {
 }
 
 function useTicketName() {
-  const ret = useTicketState<string>('name', 'test');
+  const ret = useTicketState<string>('name','');
   console.log('useTicketName:', ret);
   let result = { name: '', isReadOk: false };
   if (ret.error) {
@@ -47,7 +49,7 @@ function useTicketBalance() {
 }
 
 function useSendTicketMessage() {
-  const meta = useMetadata(metaTxt);
+  const meta = useMetadata(ftTicketMetaTxt);
   return useSendMessageWithGas(ADDRESS.TICKET_CONTRACT_ADDRESS, meta);
 }
 

@@ -2,13 +2,16 @@ import { useAccount, useReadWasmState, useSendMessageWithGas } from '@gear-js/re
 import { ADDRESS } from 'consts';
 import { Params, Token } from 'types';
 import { useParams } from 'react-router-dom';
-import stateMetaWasm from 'contracts/state.meta.wasm';
-import metaTxt from 'contracts/meta.txt';
 import { useMetadata, useWasmMetadata } from './useMetadata';
+import nftStateMeta from 'contracts/dynamic_nft_state.meta.wasm';
+import nftMetaTxt from 'contracts/dynamic_nft.meta.txt';
+
+// const nftMetaWasmURL = "/static/dynamic_nft_state.meta.wasm";
+// const nftMetaTextURL = "/static/dynamic_nft.meta.txt";
 
 function useNFTState<T>(functionName: string, argument?: any) {
-  const { buffer } = useWasmMetadata(stateMetaWasm);
-  const programMetadata = useMetadata(metaTxt);
+  const { buffer } = useWasmMetadata(nftStateMeta);
+  const programMetadata = useMetadata(nftMetaTxt);
 
   const result = useReadWasmState<T>({
     programId: ADDRESS.CONTRACT_ADDRESS,
@@ -52,7 +55,7 @@ function useApprovedNFTs() {
 }
 
 function useSendNFTMessage() {
-  const meta = useMetadata(metaTxt);
+  const meta = useMetadata(nftMetaTxt);
   return useSendMessageWithGas(ADDRESS.CONTRACT_ADDRESS, meta);
 }
 

@@ -193,7 +193,7 @@ impl Contract {
         if let Some(nft_event) = self.transactions.get(&transaction_hash) {
             nft_event.clone()
         } else {
-            let nft_event = action(self);
+            let nft_event: NFTEvent = action(self);
 
             self.transactions
                 .insert(transaction_hash, nft_event.clone());

@@ -4,10 +4,11 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import plus from 'assets/images/form/plus.svg';
-import { useSendNFTMessage } from 'hooks';
-import { getMintDetails, getMintPayload, ipfsCrustPins,ipfsUpload,stringToFile } from 'utils';
+import { useSendNFTMessage, useSendTicketMessage } from 'hooks';
+import { getMintDetails, getMintPayload, ipfsCrustPins, ipfsUpload, stringToFile } from 'utils';
 import { Attributes } from 'components';
-import styles from './Create.module.scss';
+import styles from './CreateForm.module.scss';
+import { ImageItem } from 'types';
 
 type AttributesValue = { key: string; value: string };
 type Values = { name: string; description: string; image: FileList; attributes: AttributesValue[]; rarity: string };
@@ -23,13 +24,18 @@ const validateImage = {
   extension: (files: FileList) => IMAGE_FILE_TYPES.includes(files[0].type) || 'Image should be .jpg, .png or .gif',
 };
 
-function Create() {
+type CreateFormProps = {
+  cimage: ImageItem;
+};
+
+function CreateForm({ cimage }: CreateFormProps) {
   const { formState, control, register, handleSubmit, resetField, reset } = useForm<Values>({ defaultValues });
   const { fields, append, remove } = useFieldArray({ control, name: 'attributes' });
   const { errors } = formState;
 
   const alert = useAlert();
   const sendMessage = useSendNFTMessage();
+  const sendTicketMsg = useSendTicketMessage();
 
   const [isAnyAttribute, setIsAnyAttribute] = useState(false);
   const [isRarity, setIsRarity] = useState(false);
@@ -60,22 +66,22 @@ function Create() {
 
   const onSubmit = async (data: Values) => {
     const { name, description, attributes, rarity } = data;
-    const image = data.image[0];
+    // const image = data.image[0];
 
-    const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
     try {
-      const { Hash } = await ipfsUpload(image);
 
-      await ipfsCrustPins(Hash);
+      const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
+      // const { Hash } = await ipfsUpload(image);
+      // await ipfsCrustPins(Hash);
 
       let detailsCid = '';
       if (details) {
-        const txtfile = stringToFile(details,"detail.txt","plain/text");
+        const txtfile = stringToFile(details, 'detail.txt', 'plain/text');
         const ret2 = await ipfsUpload(txtfile);
         await ipfsCrustPins(ret2.Hash);
         detailsCid = ret2.Hash;
       }
-      const payload = getMintPayload(name, description, Hash, detailsCid ? detailsCid : '');
+      const payload = getMintPayload(name, description, cimage.link.replace(/^.*\//, ''), detailsCid ? detailsCid : '');
       await sendMessage({ payload, onSuccess: resetForm });
     } catch (error) {
       alert.error((error as Error).message);
@@ -84,7 +90,7 @@ function Create() {
 
   return (
     <>
-      <h2 className={styles.heading}>Create NFT</h2>
+      <h2 className={styles.heading}>Create NFT, tips: 需要HAI代币</h2>
       <div className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>
@@ -119,14 +125,19 @@ function Create() {
           )}
 
           <div className={styles.item}>
-            <FileInput label="Image" className={styles.input} accept={IMAGE_FILE_TYPES.join(', ')} {...register('image', { validate: validateImage })} />
-            <p className={styles.error}>{errors.image?.message}</p>
+            {/* <FileInput label="Image" className={styles.input} accept={IMAGE_FILE_TYPES.join(', ')} {...register('image', { validate: validateImage })} />
+            <p className={styles.error}>{errors.image?.message}</p> */}
           </div>
-          <Button type="submit" text="Create" className={styles.button} block />
+          <div className={styles.btns}>
+            <Button type="submit" text="Submit" className={styles.button} />
+          </div>
         </form>
+        <div className={styles.nftimg}>
+          <img src={cimage.link} className={styles.nftimg} />
+        </div>
       </div>
     </>
   );
 }
 
-export { Create };
+export { CreateForm };

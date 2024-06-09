@@ -22,6 +22,7 @@
 
 .main {
   padding: 25px 40px;
+  display: flex;
   background-color: #212121;
   border: 1px dashed #0e0e0e;
   border-radius: $borderRadius;
@@ -29,6 +30,7 @@
 
 .form {
   @include verticalGap(32px);
+  flex: 1 0 auto;
 }
 
 .item {
@@ -62,4 +64,15 @@
   &Error {
     margin-left: auto;
   }
+}
+
+.nftimg{
+  width: 200px;
+}
+
+.btns{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

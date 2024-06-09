@@ -34,6 +34,10 @@ pub enum FTAction {
         amount: u128,
     },
     Burn(u128),
+    BurnFrom {
+        from: ActorId,
+        amount: u128,
+    },
     Transfer {
         from: ActorId,
         to: ActorId,
@@ -42,6 +46,9 @@ pub enum FTAction {
     Approve {
         to: ActorId,
         amount: u128,
+    },
+    AddMinter {
+        minter_id: ActorId,
     },
     TotalSupply,
     BalanceOf(ActorId),
@@ -55,15 +62,22 @@ pub enum FTEvent {
         from: ActorId,
         to: ActorId,
         amount: u128,
-    }, 
+    },
     AirDrop {
         recipients: Vec<ActorId>,
+        amount: u128,
+    },  
+     BurnFrom {
+        from: ActorId,
         amount: u128,
     },
     Approve {
         from: ActorId,
         to: ActorId,
         amount: u128,
+    },
+    MinterAdded {
+        minter_id: ActorId,
     },
     TotalSupply(u128),
     Balance(u128),
@@ -79,4 +93,5 @@ pub struct IoFungibleToken {
     pub balances: Vec<(ActorId, u128)>,
     pub allowances: Vec<(ActorId, Vec<(ActorId, u128)>)>,
     pub decimals: u8,
+    pub authorized_minters:Vec<ActorId>,
 }
