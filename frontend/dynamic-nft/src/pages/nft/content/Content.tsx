@@ -17,6 +17,7 @@ type Props = {
   attributes?: { [key: string]: string };
   onTransferButtonClick: () => void;
   onApproveButtonClick: () => void;
+  onPlayGameButtonClick: () => void;
   onRevokeButtonClick: (address: HexString) => void;
 };
 
@@ -29,6 +30,7 @@ function Content(props: Props) {
     approvedAccounts,
     rarity,
     attributes,
+    onPlayGameButtonClick,
     onTransferButtonClick,
     onApproveButtonClick,
     onRevokeButtonClick,
@@ -52,6 +54,7 @@ function Content(props: Props) {
             <div className={styles.buttons}>
               <Button text="Transfer" color="secondary" onClick={onTransferButtonClick} block />
               <Button text="Approve" onClick={onApproveButtonClick} block />
+              <Button text="PlayGame" onClick={onPlayGameButtonClick} block />
             </div>
           )}
         </section>

@@ -7,6 +7,7 @@ import { ImageList } from './cardlist';
 import { Home } from './home';
 import { NFT } from './nft';
 import { Ticket } from './ticket';
+import { GameBox } from './game';
 
 const routes = [
   { path: '/', Page: Home },
@@ -15,6 +16,7 @@ const routes = [
   { path: 'create', Page: CreateNft, isPrivate: true },
   { path: 'addminter', Page: AddMinter, isPrivate: true },
   { path: 'mint_ticket', Page: Ticket, isPrivate: true },
+  { path: 'playpage', Page: GameBox, isPrivate: true },
 ];
 
 function Routing() {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { TokenDetails } from 'types';
+import { TokenDetails, Attributes } from 'types';
 import { getIpfsAddress } from 'utils';
 import { ConfirmationModal, AddressModal, Loader } from 'components';
 import { HexString } from '@polkadot/util/types';
 import { useNFT, useSendNFTMessage } from 'hooks';
 import { Content } from './content';
+import { base64ToUtf8 } from 'utils/encode';
 
 function NFT() {
   const nft = useNFT();
@@ -12,18 +13,23 @@ function NFT() {
 
   const sendMessage = useSendNFTMessage();
 
-  const [details, setDetails] = useState<TokenDetails>();
-  const { attributes, rarity } = details || {};
+  const [attrs, setDetails] = useState<Attributes>();
 
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [revokedAddress, setRevokedAddress] = useState('' as HexString);
-
+  const rarity = '1';
   useEffect(() => {
     if (reference) {
-      fetch(getIpfsAddress(reference))
-        .then((response) => response.json())
-        .then(setDetails);
+      try {
+        const realstr = base64ToUtf8(reference);
+        setDetails(JSON.parse(realstr));
+      } catch (error) {
+        console.log(error);
+      }
+      // fetch(getIpfsAddress(reference))
+      //   .then((response) => response.json())
+      //   .then(setDetails);
     }
   }, [reference]);
 
@@ -39,12 +45,13 @@ function NFT() {
 
   const onSuccess = closeModal;
 
-  const transfer = (address: HexString) =>
-    sendMessage({ payload: { Transfer: { to: address, tokenId: id } }, onSuccess });
-  const approve = (address: HexString) =>
-    sendMessage({ payload: { Approve: { to: address, tokenId: id } }, onSuccess });
-  const revoke = () =>
-    sendMessage({ payload: { RevokeApproval: { approvedAccount: revokedAddress, tokenId: id } }, onSuccess });
+  const transfer = (address: HexString) => sendMessage({ payload: { Transfer: { to: address, tokenId: id } }, onSuccess });
+  const approve = (address: HexString) => sendMessage({ payload: { Approve: { to: address, tokenId: id } }, onSuccess });
+  const revoke = () => sendMessage({ payload: { RevokeApproval: { approvedAccount: revokedAddress, tokenId: id } }, onSuccess });
+
+  const startPlay = () => {
+    sendMessage({ payload: { UpdateDynamicData: { approvedAccount: revokedAddress, tokenId: id } }, onSuccess });
+  };
 
   return (
     <>
@@ -56,10 +63,11 @@ function NFT() {
           description={nft.description}
           approvedAccounts={nft.approvedAccountIds}
           rarity={rarity}
-          attributes={attributes}
+          attributes={attrs}
           onTransferButtonClick={openTransferModal}
           onApproveButtonClick={openApproveModal}
           onRevokeButtonClick={openRevokeModal}
+          onPlayGameButtonClick={startPlay}
         />
       ) : (
         <Loader />

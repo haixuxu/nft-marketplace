@@ -1,7 +1,7 @@
 const getMintDetails = (attributesValue?: { key: string; value: string }[], rarity?: string) => {
   const attributes = attributesValue?.reduce((accumulator, { key, value }) => ({ ...accumulator, [key]: value }), {});
 
-  return JSON.stringify({ attributes, rarity });
+  return JSON.stringify(attributes);
 };
 
 const getMintPayload = (name: string, description: string, imgCid: string, detailsCid?: string) => {

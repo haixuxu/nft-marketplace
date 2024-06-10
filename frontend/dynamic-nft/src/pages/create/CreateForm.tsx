@@ -1,4 +1,3 @@
-
 import { Button, Checkbox, FileInput, Input, Textarea } from '@gear-js/ui';
 import { useAlert } from '@gear-js/react-hooks';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -10,6 +9,7 @@ import { getMintDetails, getMintPayload, ipfsCrustPins, ipfsUpload, stringToFile
 import { Attributes, Img } from 'components';
 import styles from './CreateForm.module.scss';
 import { ImageItem } from 'types';
+import { utf8ToBase64 } from 'utils/encode';
 
 type AttributesValue = { key: string; value: string };
 type Values = { name: string; description: string; image: FileList; attributes: AttributesValue[]; rarity: string };
@@ -19,11 +19,11 @@ const defaultValues = { name: '', description: '', attributes: defaultAttributes
 
 const IMAGE_FILE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 
-const validateImage = {
-  required: (files: FileList) => !!files.length || 'Attach image',
-  size: (files: FileList) => files[0].size / 1024 ** 2 < 10 || 'Image size should not exceed 10MB',
-  extension: (files: FileList) => IMAGE_FILE_TYPES.includes(files[0].type) || 'Image should be .jpg, .png or .gif',
-};
+// const validateImage = {
+//   required: (files: FileList) => !!files.length || 'Attach image',
+//   size: (files: FileList) => files[0].size / 1024 ** 2 < 10 || 'Image size should not exceed 10MB',
+//   extension: (files: FileList) => IMAGE_FILE_TYPES.includes(files[0].type) || 'Image should be .jpg, .png or .gif',
+// };
 
 function CreateForm() {
   const { formState, control, register, handleSubmit, resetField, reset } = useForm<Values>({ defaultValues });
@@ -34,7 +34,6 @@ function CreateForm() {
   const sendMessage = useSendNFTMessage();
   const sendTicketMsg = useSendTicketMessage();
   const ticketInfo = useTicketName();
-
 
   const [cimage, setImageItem] = useState<ImageItem>({ link: '', name: '', desc: '' });
 
@@ -87,16 +86,17 @@ function CreateForm() {
       // const { Hash } = await ipfsUpload(image);
       // await ipfsCrustPins(Hash);
 
-      let detailsCid = '';
+      let detailsB64str = '';
 
       console.log('details===', details);
       if (details) {
-        const txtfile = stringToFile(details, 'detail.txt', 'plain/text');
-        const ret2 = await ipfsUpload(txtfile);
-        await ipfsCrustPins(ret2.Hash);
-        detailsCid = ret2.Hash;
+        detailsB64str = utf8ToBase64(details); // 基本属性直接存chain上
+        // const txtfile = stringToFile(details, 'detail.txt', 'plain/text');
+        // const ret2 = await ipfsUpload(txtfile);
+        // await ipfsCrustPins(ret2.Hash);
+        // detailsCid = ret2.Hash;
       }
-      const payload = getMintPayload(name, description, cimage.link.replace(/^.*\//, ''), detailsCid ? detailsCid : '');
+      const payload = getMintPayload(name, description, cimage.link.replace(/^.*\//, ''), detailsB64str);
       await sendMessagePromsie(payload);
       resetForm();
     } catch (error) {
@@ -130,7 +130,7 @@ function CreateForm() {
           </div>
           {isAnyAttribute && <Attributes register={register} fields={fields} onRemoveButtonClick={remove} />}
 
-          <div className={clsx(styles.input, styles.checkboxWrapper)}>
+          {/* <div className={clsx(styles.input, styles.checkboxWrapper)}>
             <div className={styles.item}>
               <Checkbox label="Rarity" checked={isRarity} onChange={toggleRarity} />
               <p className={clsx(styles.error, styles.checkboxError)}>{errors.rarity?.message}</p>
@@ -140,7 +140,7 @@ function CreateForm() {
             <div className={styles.item}>
               <Input label="Rarity" className={styles.input} {...register('rarity', { required: 'Enter rarity' })} />
             </div>
-          )}
+          )} */}
 
           <div className={styles.item}>
             {/* <FileInput label="Image" className={styles.input} accept={IMAGE_FILE_TYPES.join(', ')} {...register('image', { validate: validateImage })} />
@@ -150,9 +150,7 @@ function CreateForm() {
             <Button type="submit" text={buttonText} className={styles.button} />
           </div>
         </form>
-        <div className={styles.nftimg}>
-          {cimage.link?<Img src={cimage.link} className={styles.nftimg} />:''}
-        </div>
+        <div className={styles.nftimg}>{cimage.link ? <Img src={cimage.link} className={styles.nftimg} /> : ''}</div>
       </div>
     </>
   );

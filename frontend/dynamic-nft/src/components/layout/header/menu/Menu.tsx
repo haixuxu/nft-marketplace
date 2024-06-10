@@ -12,6 +12,10 @@ function Menu() {
       <li>
         <Link to="/mint_ticket">AirDrop NFT Ticket</Link>
       </li>
+
+      <li>
+        <Link to="/playpage">Play Game</Link>
+      </li>
     </ul>
   );
 }
