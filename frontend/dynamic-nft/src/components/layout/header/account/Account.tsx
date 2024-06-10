@@ -6,7 +6,7 @@ import { AccountsModal } from './accounts-modal';
 import { Wallet } from './wallet';
 
 function Account() {
-  const { account } = useAccount();
+  const { account,logout } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -20,7 +20,9 @@ function Account() {
   return (
     <>
       {account ? (
-        <Wallet address={account.address} name={account.meta.name} onClick={openModal} />
+          <div className="accountinfo">
+             <Wallet address={account.address} name={account.meta.name} onClick={openModal} />
+          </div>
       ) : (
         <Button icon={userSVG} text="Sign in" onClick={openModal} />
       )}

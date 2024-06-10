@@ -4,7 +4,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import plus from 'assets/images/form/plus.svg';
-import { useSendNFTMessage, useSendTicketMessage } from 'hooks';
+import { useSendNFTMessage, useSendTicketMessage, useTicketName } from 'hooks';
 import { getMintDetails, getMintPayload, ipfsCrustPins, ipfsUpload, stringToFile } from 'utils';
 import { Attributes, Img } from 'components';
 import styles from './CreateForm.module.scss';
@@ -32,6 +32,7 @@ function CreateForm() {
   const alert = useAlert();
   const sendMessage = useSendNFTMessage();
   const sendTicketMsg = useSendTicketMessage();
+  const ticketInfo = useTicketName();
 
 
   const [cimage, setImageItem] = useState<ImageItem>({ link: '', name: '', desc: '' });
@@ -106,7 +107,7 @@ function CreateForm() {
 
   return (
     <>
-      <h2 className={styles.heading}>Create NFT, tips: 需要HAI代币</h2>
+      <h2 className={styles.heading}>Create NFT, tips: 铸造一个需要一个{ticketInfo.name}代币</h2>
       <div className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>

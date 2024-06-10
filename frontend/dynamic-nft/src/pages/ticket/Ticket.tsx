@@ -39,7 +39,7 @@ function Ticket() {
 
   return (
     <>
-      <h2 className={styles.heading}>air drop nft ticket for addres list</h2>
+      <h2 className={styles.heading}>airdrop nft ticket for addres list</h2>
       <div className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>
