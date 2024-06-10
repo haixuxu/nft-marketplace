@@ -1,37 +1,53 @@
 .imagelist {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  
-    li {
-        margin: 10px;
-        width: 210px;
-        height: 350px;
-        transition: box-shadow .3s;
-        border: 1px solid #eee;
-        border-radius:10px;
-        cursor: pointer;
-        
-        div{
-            height: 310px; 
-        }
-        img{
-            width: 100%;
-            height: 100%;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-           
-        }
-        span{
-            display:block;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-        }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
-        &:hover{
-            box-shadow: 0 0 11px rgba(33,33,33,.2); 
-        }
+  li {
+    margin: 10px;
+    width: 210px;
+    height: 350px;
+    transition: box-shadow 0.3s;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    &:hover {
+      box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
     }
   }
-  
+}
+
+.carditem {
+  position: relative;
+  height: 310px;
+}
+
+.mintIcon {
+  width: 36px;
+  height: 36px;
+  right: 10px;
+  top: 10px;
+  z-index: 9999;
+  text-align: center;
+  line-height: 36px;
+  position: absolute;
+  //   border-radius: 50%;
+  background-image: linear-gradient(to right, #ff0000, #00ff00); /* 渐变色 */
+  -webkit-background-clip: text; /* 兼容性前缀 */
+  background-clip: text;
+  color: transparent; /* 将文字颜色设置为透明 */
+}
+
+.btitle {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}

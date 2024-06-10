@@ -36,7 +36,6 @@ export function Img(props: IImgProps<any>) {
     }, []);
 
   const startLoadTask = () => {
-
     const imgDom = new Image();
     imgDom.src = props.src;
 

@@ -43,11 +43,11 @@ function Ticket() {
       <div className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>
-            <Input label="Amount"  className={styles.input} {...register('amount', { required: 'amount is required' })} />
+            <Input label="Amount"  className={styles.input} {...register('amount', { required: 'amount is required' })} placeholder='airdrop amount to every address' />
             <p className={styles.error}>{errors.amount?.message}</p>
           </div>
           <div className={styles.item}>
-            <Textarea label="Address" className={styles.textera} {...register('addressData', { required: 'address is required' })} placeholder="wallet address list, format: address|address|address" />
+            <Textarea label="Address" className={styles.textera} {...register('addressData', { required: 'address is required' })} placeholder="support format: address1|address2|address3" />
             <p className={styles.error}>{errors.addressData?.message}</p>
           </div>
             <div className={styles.btns}>

@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import plus from 'assets/images/form/plus.svg';
 import { useSendNFTMessage, useSendTicketMessage } from 'hooks';
 import { getMintDetails, getMintPayload, ipfsCrustPins, ipfsUpload, stringToFile } from 'utils';
-import { Attributes } from 'components';
+import { Attributes, Img } from 'components';
 import styles from './CreateForm.module.scss';
 import { ImageItem } from 'types';
 
@@ -32,11 +32,13 @@ function CreateForm() {
   const alert = useAlert();
   const sendMessage = useSendNFTMessage();
   const sendTicketMsg = useSendTicketMessage();
+
+
   const [cimage, setImageItem] = useState<ImageItem>({ link: '', name: '', desc: '' });
 
   const [isAnyAttribute, setIsAnyAttribute] = useState(false);
   const [isRarity, setIsRarity] = useState(false);
-  const [buttonText, setButtonText] = useState("Submit");
+  const [buttonText, setButtonText] = useState('Submit');
 
   const toggleAttributes = () => setIsAnyAttribute((prevValue) => !prevValue);
   const toggleRarity = () => setIsRarity((prevValue) => !prevValue);
@@ -50,11 +52,11 @@ function CreateForm() {
     }
   }, [isAnyAttribute, resetField]);
 
-  const sendMessagePromsie= (payload:any)=>{
-    return new Promise((resolve,reject)=>{
-      sendMessage({ payload, onSuccess: ()=>resolve('ok') ,onError:()=>reject(Error("Create Error"))});
+  const sendMessagePromsie = (payload: any) => {
+    return new Promise((resolve, reject) => {
+      sendMessage({ payload, onSuccess: () => resolve('ok'), onError: () => reject(Error('Create Error')) });
     });
-  }
+  };
 
   useEffect(() => {
     resetField('rarity');
@@ -78,14 +80,14 @@ function CreateForm() {
     // const image = data.image[0];
 
     try {
-      setButtonText("Submiting");
+      setButtonText('Submiting');
       const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
       // const { Hash } = await ipfsUpload(image);
       // await ipfsCrustPins(Hash);
 
       let detailsCid = '';
 
-      console.log('details===',details);
+      console.log('details===', details);
       if (details) {
         const txtfile = stringToFile(details, 'detail.txt', 'plain/text');
         const ret2 = await ipfsUpload(txtfile);
@@ -97,8 +99,8 @@ function CreateForm() {
       resetForm();
     } catch (error) {
       alert.error((error as Error).message);
-    }finally{
-      setButtonText("Submit");
+    } finally {
+      setButtonText('Submit');
     }
   };
 
@@ -143,11 +145,11 @@ function CreateForm() {
             <p className={styles.error}>{errors.image?.message}</p> */}
           </div>
           <div className={styles.btns}>
-            <Button type="submit" text={buttonText} className={styles.button}/>
+            <Button type="submit" text={buttonText} className={styles.button} />
           </div>
         </form>
         <div className={styles.nftimg}>
-          <img src={cimage.link} className={styles.nftimg} />
+          {cimage.link?<Img src={cimage.link} className={styles.nftimg} />:''}
         </div>
       </div>
     </>

@@ -13,15 +13,17 @@ function ImageList() {
 
   const onChoose = (item2:ImageItem)=>{
     localStorage.setItem("chooseModel",JSON.stringify(item2));
+    console.log('click===',item2);
     navigaway("/create");
   }
 
   const getImageList = () =>
     ImageItems.map((item,index) => (
       <li key={index}>
-        <div onClick={()=>onChoose(item)}>
+        <div onClick={()=>onChoose(item)} className={styles.carditem}>
           <Img src={item.link} alt={item.name} />
-          <span>{item.name}</span>
+          <div className={styles.btitle}>{item.name}</div>
+          <div className={styles.mintIcon}>Mint</div>
         </div>
       </li>
     ));
