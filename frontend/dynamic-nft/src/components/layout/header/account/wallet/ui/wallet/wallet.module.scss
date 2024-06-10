@@ -1,0 +1,21 @@
+
+
+.wallet {
+  display: flex;
+  align-items: center;
+}
+
+.accountBtn {
+  background-color: #ffffff1a;
+  padding: 6px 10px;
+  margin-left: 12px;
+
+  &:hover {
+    background-color: #ffffff4d;
+  }
+
+  & > div {
+    // hacky, but need to override Identicon's 'cursor: copy'
+    cursor: inherit !important;
+  }
+}

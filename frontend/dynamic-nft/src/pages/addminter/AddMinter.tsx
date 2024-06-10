@@ -11,7 +11,7 @@ const defaultValues = { address: '' };
 
 
 function AddMinter() {
-  const { formState, control, register, handleSubmit, resetField, reset } = useForm<Values>({ defaultValues });
+  const { formState, register, handleSubmit, reset } = useForm<Values>({ defaultValues });
   const { errors } = formState;
 
   const alert = useAlert();

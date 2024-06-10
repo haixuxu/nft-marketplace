@@ -7,5 +7,6 @@ import { Footer } from './footer';
 
 export * from './image';
 export * from './attributes';
+export * from './Modal/Modal';
 
 export { Header,Footer, AddressModal, ConfirmationModal, ApiLoader, Loader, OnLogin, InfoText };

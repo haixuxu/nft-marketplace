@@ -1,5 +1,5 @@
 import { useAccount, useBalance, useBalanceFormat } from '@gear-js/react-hooks';
-import { AccountButton } from '../account-button';
+import { AccountButton } from './account-button';
 import styles from './Wallet.module.scss';
 import { useTicketBalance, useTicketName } from 'hooks/ticket';
 import { Button } from '@gear-js/ui';

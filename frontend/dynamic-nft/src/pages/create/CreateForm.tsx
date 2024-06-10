@@ -1,3 +1,4 @@
+
 import { Button, Checkbox, FileInput, Input, Textarea } from '@gear-js/ui';
 import { useAlert } from '@gear-js/react-hooks';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -107,7 +108,7 @@ function CreateForm() {
 
   return (
     <>
-      <h2 className={styles.heading}>Create NFT, tips: 铸造一个需要一个{ticketInfo.name}代币</h2>
+      <h2 className={styles.heading}>Create NFT, tips: 铸造一个NFT需要一个{ticketInfo.name}代币</h2>
       <div className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>

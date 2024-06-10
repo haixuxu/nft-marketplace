@@ -1,0 +1,135 @@
+@use '@gear-js/ui/variables' as *;
+
+.simplebar {
+  max-height: 50vh;
+ 
+}
+
+.modal {
+  position: relative;
+
+  &:not(.empty) {
+    padding-bottom: 102px;
+  }
+}
+
+.footer {
+  position: absolute; // workaround cuz footer has different bg color
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px 32px;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  background-color: #222225;
+}
+
+.logoutButton {
+  margin-left: auto;
+}
+
+.list {
+  .accountButton {
+    width: 100%;
+    font-weight: 500;
+    // text-transform: uppercase;
+    
+    padding: 16px 40px;
+
+    &.active {
+      background: $successColor;
+    }
+  }
+
+  .accountName {
+    font-size: $fontSizeMedium;
+    padding: 0 5px;
+  }
+
+  .accountIcon {
+    // @include md {
+    //   display: none !important;
+    // }
+  }
+}
+
+.accountItem {
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  .accountButton {
+    flex: 1 1;
+    background-color: #ffffff1a;
+    border-radius: 24px;
+    margin-right: 10px;
+    height: 48px;
+    line-height: 48px;
+    &:hover{
+      background-color: #ffffff4d;
+    }
+    
+    &.active {
+      cursor: default;
+      background-color: $successColor;
+
+      &:hover {
+        background-color: $successColor;
+      }
+    }
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff1a;
+  letter-spacing: 0.08em;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    background-color: #ffffff4d;
+  }
+
+  &:not(.enabled) {
+    pointer-events: none;
+
+    .status {
+      opacity: 0.6;
+    }
+  }
+
+  .status {
+    text-align: right;
+
+    &Text {
+      font-size: 12px;
+      line-height: 14px;
+    }
+
+    &Accounts {
+      font-size: 10px;
+      line-height: 10px;
+      color: $successColor;
+    }
+  }
+
+  .connectIcon {
+    width: 12px;
+    height: 12px;
+    margin-left: 7px;
+  }
+}
+
+.listitem{
+  padding: 10px 0;
+  button{
+    padding: 10px 15px;
+    width: 100%;
+  }
+}
