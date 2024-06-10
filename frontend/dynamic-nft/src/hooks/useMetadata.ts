@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { ProgramMetadata } from '@gear-js/api';
 import { Buffer } from 'buffer';
 import { useAlert } from '@gear-js/react-hooks';
-// import { fetchData } from 'utils';
+import { fetchData } from 'utils';
 
 export const useMetadata = (source: RequestInfo | URL) => {
   const [data, setData] = useState<ProgramMetadata>();
 
   useEffect(() => {
-    fetch(source)
+    fetchData(source)
       .then((res) => res.text() as Promise<string>)
       .then((raw) => ProgramMetadata.from(`0x${raw}`))
       .then((meta) => setData(meta));
@@ -23,7 +23,7 @@ export const useWasmMetadata = (source: RequestInfo | URL) => {
 
   useEffect(() => {
     if (source) {
-      fetch(source)
+      fetchData(source)
         .then((response) => response.arrayBuffer())
         .then((array) => Buffer.from(array))
         .then((buffer) => setData(buffer))

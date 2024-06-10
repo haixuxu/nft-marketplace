@@ -24,11 +24,7 @@ const validateImage = {
   extension: (files: FileList) => IMAGE_FILE_TYPES.includes(files[0].type) || 'Image should be .jpg, .png or .gif',
 };
 
-type CreateFormProps = {
-  cimage: ImageItem;
-};
-
-function CreateForm({ cimage }: CreateFormProps) {
+function CreateForm() {
   const { formState, control, register, handleSubmit, resetField, reset } = useForm<Values>({ defaultValues });
   const { fields, append, remove } = useFieldArray({ control, name: 'attributes' });
   const { errors } = formState;
@@ -36,6 +32,7 @@ function CreateForm({ cimage }: CreateFormProps) {
   const alert = useAlert();
   const sendMessage = useSendNFTMessage();
   const sendTicketMsg = useSendTicketMessage();
+  const [cimage, setImageItem] = useState<ImageItem>({ link: '', name: '', desc: '' });
 
   const [isAnyAttribute, setIsAnyAttribute] = useState(false);
   const [isRarity, setIsRarity] = useState(false);
@@ -45,6 +42,11 @@ function CreateForm({ cimage }: CreateFormProps) {
 
   useEffect(() => {
     resetField('attributes');
+    try {
+      setImageItem(JSON.parse(localStorage.getItem('chooseModel') as string));
+    } catch (error) {
+      alert.error('please select NFT Model');
+    }
   }, [isAnyAttribute, resetField]);
 
   useEffect(() => {
@@ -69,7 +71,6 @@ function CreateForm({ cimage }: CreateFormProps) {
     // const image = data.image[0];
 
     try {
-
       const details = isAnyAttribute || isRarity ? getMintDetails(isAnyAttribute ? attributes : undefined, rarity) : '';
       // const { Hash } = await ipfsUpload(image);
       // await ipfsCrustPins(Hash);

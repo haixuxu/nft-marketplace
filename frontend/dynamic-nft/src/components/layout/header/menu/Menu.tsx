@@ -5,6 +5,8 @@ function Menu() {
   return (
     <ul className={styles.menu}>
       <li>
+        <Link to="/card_list">NFT Model</Link>
+      </li> <li>
         <Link to="/create">Create NFT</Link>
       </li>
       <li>
