@@ -4,7 +4,7 @@ import { useMetadata, useWasmMetadata } from './useMetadata';
 import ftTicketStateMeta from 'contracts/fungible_token_state.meta.wasm';
 import ftTicketMetaTxt from 'contracts/fungible_token.meta.txt';
 // const ftTicketWasm = '/static/fungible_token_state.meta.wasm';
-const ftMetaTxt = "/static/fungible_token.meta.txt";
+const ftMetaTxt = '/static/fungible_token.meta.txt';
 
 function useTicketState<T>(functionName: string, argument?: any) {
   const { buffer } = useWasmMetadata(ftTicketStateMeta);
