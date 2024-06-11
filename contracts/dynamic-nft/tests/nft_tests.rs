@@ -33,13 +33,9 @@ fn mint_limit_exceed() {
     sys.init_logger();
     let nft = gtest::Program::current_opt(&sys);
 
-    let collection = Collection {
+    let init_nft = InitNFT {
         name: String::from("MyToken"),
         description: String::from("My token"),
-    };
-
-    let init_nft = InitNFT {
-        collection,
         royalties: None,
         config: Config {
             max_mint_count: Some(1),
@@ -65,14 +61,11 @@ fn mint_authorized() {
     sys.init_logger();
     let nft = gtest::Program::current_opt(&sys);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
 
     let authorized_minters: Vec<ActorId> = vec![USERS[0].into()];
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: None,
@@ -98,14 +91,10 @@ fn mint_not_authorized() {
     sys.init_logger();
     let nft = gtest::Program::current_opt(&sys);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
-
     let authorized_minters: Vec<ActorId> = vec![USERS[0].into()];
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: None,
@@ -131,14 +120,10 @@ fn mint_added() {
     sys.init_logger();
     let nft = gtest::Program::current_opt(&sys);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
-
     let authorized_minters: Vec<ActorId> = vec![USERS[0].into()];
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: None,

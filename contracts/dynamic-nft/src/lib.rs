@@ -6,12 +6,15 @@ use gear_lib_derive::{NFTCore, NFTMetaState, NFTStateKeeper};
 use gear_lib_old::non_fungible_token::{io::NFTTransfer, nft_core::*, state::*, token::*};
 use gstd::{
     collections::HashMap,
-    exec::{self},
-    msg,
+    exec,
+    msg::{self},
     prelude::*,
     ActorId,
 };
+use player::*;
 use primitive_types::{H256, U256};
+
+mod player;
 
 pub const ZERO_ID: ActorId = ActorId::zero();
 
@@ -24,10 +27,12 @@ pub struct DynamicNft {
     pub token_id: TokenId,
     pub owner: ActorId,
     pub transactions: HashMap<H256, NFTEvent>,
-    pub collection: Collection,
-    // pub config: Config,
+
+    pub name: String,
+    pub description: String,
+    pub ref_admin: ActorId,
     pub ref_contract: ActorId,
-    pub dynamic_data: Vec<u8>,
+    pub dynamic_data: HashMap<TokenId, NftDynamicInfo>,
 }
 
 static mut CONTRACT: Option<DynamicNft> = None;
@@ -39,16 +44,21 @@ unsafe extern "C" fn init() {
         config.royalties.as_ref().expect("Unable to g").validate();
     }
     if config.ref_contract.is_zero() {
-        panic!("NonFungibleToken: zero address");
+        panic!("NonFungibleToken: zero address, ref_contract");
+    }
+    if config.ref_admin.is_zero() {
+        panic!("NonFungibleToken: zero address, ref_admin");
     }
 
     let nft = DynamicNft {
         token: NFTState {
-            name: config.collection.name.clone(),
+            name: config.name.clone(),
             royalties: config.royalties,
             ..Default::default()
         },
-        collection: config.collection,
+        name: config.name,
+        description: config.description,
+        ref_admin: config.ref_admin,
         ref_contract: config.ref_contract,
         // config: config.config,
         owner: msg::source(),
@@ -83,6 +93,8 @@ async unsafe fn main() {
             .expect("CALL RESP: Error transfer ft tokens");
 
             nft.process_transaction(transaction_id, |nft| {
+                // TODO auto generate rarity
+
                 NFTEvent::Transfer(MyNFTCore::mint(nft, token_metadata))
             })
         }
@@ -148,15 +160,33 @@ async unsafe fn main() {
         //         NFTEvent::MinterAdded { minter_id }
         //     })
         // }
-        NFTAction::UpdateDynamicData {
-            transaction_id,
-            data,
-        } => nft.process_transaction(transaction_id, |nft| {
-            let data_hash = H256::from(sp_core_hashing::blake2_256(&data));
-            nft.dynamic_data = data;
+        NFTAction::SetContract { contract_id } => {
+            let source = msg::source();
+            if source.eq(&nft.ref_admin) {
+                nft.ref_contract = contract_id;
+                NFTEvent::SetContractOK { contract_id }
+            } else {
+                panic!("Only can excute with admin!");
+            }
+        }
+        NFTAction::Upgrade { token_id } => {
+            let nft_ext_info = nft
+                .dynamic_data
+                .get_mut(&token_id)
+                .expect("token_id is invalid");
+            update_nft_dynamic_info(nft_ext_info);
+            NFTEvent::Upgraded {
+                data: nft_ext_info.clone(),
+            }
+        } // NFTAction::UpdateDynamicData {
+          //     transaction_id,
+          //     data,
+          // } => nft.process_transaction(transaction_id, |nft| {
+          //     let data_hash = H256::from(sp_core_hashing::blake2_256(&data));
+          //     nft.dynamic_data = data;
 
-            NFTEvent::Updated { data_hash }
-        }),
+          //     NFTEvent::Updated { data_hash }
+          // }),
     };
     msg::reply(reply, 0).expect("Failed to encode or reply with `Result<NftEvent, NftError>`.");
 }
@@ -168,6 +198,8 @@ pub trait MyNFTCore: NFTCore {
 impl MyNFTCore for DynamicNft {
     fn mint(&mut self, token_metadata: TokenMetadata) -> NFTTransfer {
         let transfer = NFTCore::mint(self, &msg::source(), self.token_id, Some(token_metadata));
+        self.dynamic_data
+            .insert(self.token_id, generate_random_nft_dynamic_info());
         self.token_id = self.token_id.saturating_add(U256::one());
         transfer
     }
@@ -255,6 +287,11 @@ impl From<DynamicNft> for IoNFT {
         let transactions = transactions
             .iter()
             .map(|(key, event)| (*key, event.clone()))
+            .collect();
+
+        let dynamic_data = dynamic_data
+            .iter()
+            .map(|(key, info)| (*key, info.clone()))
             .collect();
 
         Self {

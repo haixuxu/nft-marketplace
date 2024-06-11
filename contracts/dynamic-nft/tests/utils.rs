@@ -9,13 +9,10 @@ pub fn init_nft(sys: &System) {
     sys.init_logger();
     let nft = Program::current_opt(sys);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
 
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),

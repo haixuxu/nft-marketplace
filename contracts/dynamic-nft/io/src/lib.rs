@@ -26,18 +26,25 @@ pub struct Config {
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
 pub struct InitNFT {
-    pub collection: Collection,
+    pub name: String,
+    pub description: String,
+    pub ref_admin: ActorId,
+    pub ref_contract: ActorId,
     pub royalties: Option<Royalties>,
     // pub config: Config,
-    pub ref_contract: ActorId,
 }
 
 #[derive(Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
-pub struct Collection {
-    pub name: String,
-    pub description: String,
+pub struct NftDynamicInfo {
+    pub rarity: u8,
+    pub sex: u8,
+    pub age: u16,
+    pub physical_attack: u16,
+    pub magic_attack: u16,
+    pub physical_defense: u16,
+    pub magic_defense: u16,
 }
 
 impl Metadata for NFTMetadata {
@@ -96,14 +103,20 @@ pub enum NFTAction {
     Clear {
         transaction_hash: H256,
     },
+    SetContract {
+        contract_id: ActorId,
+    },
     // AddMinter {
     //     transaction_id: u64,
     //     minter_id: ActorId,
     // },
-    UpdateDynamicData {
-        transaction_id: u64,
-        data: Vec<u8>,
+    Upgrade {
+        token_id: TokenId,
     },
+    // UpdateDynamicData {
+    //     transaction_id: u64,
+    //     data: Vec<u8>,
+    // },
 }
 
 #[derive(Encode, Decode, TypeInfo, Debug, Clone)]
@@ -114,8 +127,8 @@ pub enum NFTEvent {
     TransferPayout(NFTTransferPayout),
     NFTPayout(Payout),
     Approval(NFTApproval),
-    Clear{
-        operator:ActorId
+    Clear {
+        operator: ActorId,
     },
     Owner {
         owner: ActorId,
@@ -131,6 +144,12 @@ pub enum NFTEvent {
     },
     Updated {
         data_hash: H256,
+    },
+    Upgraded {
+        data: NftDynamicInfo,
+    },
+    SetContractOK {
+        contract_id: ActorId,
     },
 }
 
@@ -157,7 +176,7 @@ pub struct IoNFT {
     pub owner: ActorId,
     pub ref_contract: ActorId,
     pub transactions: Vec<(H256, NFTEvent)>,
-    pub dynamic_data: Vec<u8>,
+    pub dynamic_data: Vec<(TokenId, NftDynamicInfo)>,
 }
 
 impl From<&NFTState> for IoNFTState {

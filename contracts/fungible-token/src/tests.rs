@@ -1,5 +1,5 @@
 use fungible_token_io::*;
-use gstd::{Encode, String};
+use gstd::{vec, ActorId, Encode, String, Vec};
 use gtest::{Program, System};
 const USERS: &[u64] = &[3, 4, 5];
 

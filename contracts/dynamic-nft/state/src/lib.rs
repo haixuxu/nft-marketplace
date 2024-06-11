@@ -70,6 +70,13 @@ pub mod metafns {
             .find(|(i, _)| id.eq(i))
             .map(|(token_id, _)| token_helper(token_id, &state))
     }
+    pub fn token_ext_by_id(state: State, id: TokenId) -> Option<NftDynamicInfo> {
+        state
+            .dynamic_data
+            .iter()
+            .find(|(i, _)| id.eq(i))
+            .map(|(token_id, _)| token_ext_helper(token_id, &state))
+    }
 
     pub fn approved_tokens(state: State, account: ActorId) -> Vec<Token> {
         state
@@ -125,4 +132,22 @@ fn token_helper(token_id: &TokenId, state: &IoNFT) -> Token {
         token.reference.clone_from(&metadata.reference);
     }
     token
+}
+
+fn token_ext_helper(token_id: &TokenId, state: &IoNFT) -> NftDynamicInfo {
+    let mut info = NftDynamicInfo::default();
+    let ret = state
+        .dynamic_data
+        .iter()
+        .find(|(id, _)| token_id.eq(id));
+    if let Some((_, nft_info)) = ret{
+        info.rarity.clone_from(&nft_info.rarity);
+        info.sex.clone_from(&nft_info.sex);
+        info.age.clone_from(&nft_info.age);
+        info.physical_attack.clone_from(&nft_info.physical_attack);
+        info.magic_attack.clone_from(&nft_info.magic_attack);
+        info.physical_defense.clone_from(&nft_info.physical_defense);
+        info.magic_defense.clone_from(&nft_info.magic_defense);
+    }
+    info
 }

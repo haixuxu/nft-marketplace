@@ -12,13 +12,10 @@ async fn gclient_mint_test() -> Result<()> {
     // Checking that blocks still running.
     assert!(listener.blocks_running().await?);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
     let actor_id = ActorId::from_slice(&api.account_id().encode()).unwrap();
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),
@@ -79,14 +76,11 @@ async fn gclient_burn_test() -> Result<()> {
 
     // Checking that blocks still running.
     assert!(listener.blocks_running().await?);
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
 
     let actor_id = ActorId::from_slice(&api.account_id().encode()).unwrap();
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),
@@ -185,14 +179,10 @@ async fn gclient_transfer_test() -> Result<()> {
     // Checking that blocks still running.
     assert!(listener.blocks_running().await?);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
-
     let actor_id = ActorId::from_slice(&api.account_id().encode()).unwrap();
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),
@@ -274,14 +264,10 @@ async fn gclient_owner_test() -> Result<()> {
     // Checking that blocks still running.
     assert!(listener.blocks_running().await?);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
-
     let actor_id = ActorId::from_slice(&api.account_id().encode()).unwrap();
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),
@@ -357,14 +343,10 @@ async fn gclient_approved() -> Result<()> {
     // Checking that blocks still running.
     assert!(listener.blocks_running().await?);
 
-    let collection = Collection {
-        name: String::from("MyToken"),
-        description: String::from("My token"),
-    };
-
     let actor_id = ActorId::from_slice(&api.account_id().encode()).unwrap();
     let init_nft = InitNFT {
-        collection,
+        name: String::from("MyToken"),
+        description: String::from("My token"),
         royalties: None,
         config: Config {
             max_mint_count: Some(100),
