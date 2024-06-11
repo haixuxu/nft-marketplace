@@ -1,6 +1,8 @@
 node_modules
 target
 test
+build
+build.tar.gz
 
 # yarn
 
@@ -37,5 +39,4 @@ dist
 *.log*
 temp
 # batchmint
-wallet
 
