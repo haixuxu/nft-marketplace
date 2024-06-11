@@ -32,6 +32,13 @@ function useNFT() {
   return state;
 }
 
+function useNftDynamicInfo() {
+  const { id } = useParams() as Params;
+  const { state } = useNFTState<Record<string,string>>('token_ext_by_id', id);
+  return state||{};
+}
+
+
 function useNFTs() {
   const { state } = useNFTState<Token[]>('all_tokens', null);
   return state;
@@ -60,4 +67,4 @@ function useSendNFTMessage() {
   return useSendMessageWithGas(ADDRESS.CONTRACT_ADDRESS, meta);
 }
 
-export { useNFT, useNFTs, useOwnerNFTs, useApprovedNFTs, useSendNFTMessage };
+export { useNFT,useNftDynamicInfo, useNFTs, useOwnerNFTs, useApprovedNFTs, useSendNFTMessage };

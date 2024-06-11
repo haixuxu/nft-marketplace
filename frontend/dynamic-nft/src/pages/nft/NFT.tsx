@@ -3,12 +3,13 @@ import { TokenDetails, Attributes } from 'types';
 import { getIpfsAddress } from 'utils';
 import { ConfirmationModal, AddressModal, Loader } from 'components';
 import { HexString } from '@polkadot/util/types';
-import { useNFT, useSendNFTMessage } from 'hooks';
+import { useNFT, useNftDynamicInfo, useSendNFTMessage } from 'hooks';
 import { Content } from './content';
 import { base64ToUtf8 } from 'utils/encode';
 
 function NFT() {
   const nft = useNFT();
+  const extdata = useNftDynamicInfo();
   const { id, reference } = nft || {};
 
   const sendMessage = useSendNFTMessage();
@@ -18,7 +19,7 @@ function NFT() {
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [revokedAddress, setRevokedAddress] = useState('' as HexString);
-  const rarity = '1';
+  // const rarity = '1';
   useEffect(() => {
     if (reference) {
       try {
@@ -50,7 +51,7 @@ function NFT() {
   const revoke = () => sendMessage({ payload: { RevokeApproval: { approvedAccount: revokedAddress, tokenId: id } }, onSuccess });
 
   const startPlay = () => {
-    sendMessage({ payload: { UpdateDynamicData: { approvedAccount: revokedAddress, tokenId: id } }, onSuccess });
+    sendMessage({ payload: { Upgrade: { tokenId: id } }, onSuccess });
   };
 
   return (
@@ -62,7 +63,7 @@ function NFT() {
           ownerId={nft.ownerId}
           description={nft.description}
           approvedAccounts={nft.approvedAccountIds}
-          rarity={rarity}
+          extdata={extdata}
           attributes={attrs}
           onTransferButtonClick={openTransferModal}
           onApproveButtonClick={openApproveModal}

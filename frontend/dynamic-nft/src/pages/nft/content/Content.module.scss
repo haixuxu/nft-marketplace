@@ -11,13 +11,17 @@
 }
 
 .main {
-  display: inline-grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 30px;
+  display: flex;
+  justify-content: space-between;
+  section {
+    width: 48%;
+  }
 }
 
 .details {
-  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
 .imgCard {

@@ -14,6 +14,7 @@ type Props = {
   description: string;
   approvedAccounts: HexString[];
   rarity?: string;
+  extdata: Record<string, string>;
   attributes?: { [key: string]: string };
   onTransferButtonClick: () => void;
   onApproveButtonClick: () => void;
@@ -22,26 +23,14 @@ type Props = {
 };
 
 function Content(props: Props) {
-  const {
-    heading,
-    image,
-    ownerId,
-    description,
-    approvedAccounts,
-    rarity,
-    attributes,
-    onPlayGameButtonClick,
-    onTransferButtonClick,
-    onApproveButtonClick,
-    onRevokeButtonClick,
-  } = props;
+  const { heading, image, ownerId, description, approvedAccounts, extdata, attributes, onPlayGameButtonClick, onTransferButtonClick, onApproveButtonClick, onRevokeButtonClick } = props;
 
   const { account } = useAccount();
   const isOwner = account?.decodedAddress === ownerId;
   const isAnyApprovedAccount = !!approvedAccounts.length;
 
   const detailsClassName = clsx(styles.main, styles.details);
-
+console.log('extdata===',extdata);
   return (
     <>
       <h2 className={styles.heading}>{heading}</h2>
@@ -61,13 +50,23 @@ function Content(props: Props) {
         <section>
           <div className={detailsClassName}>
             <Card heading="Owner" text={ownerId} />
-            {rarity && <Card heading="Rarity" text={rarity} />}
+            {/* {rarity && <Card heading="Rarity" text={rarity} />} */}
             <Card heading="Description" text={description} />
             {attributes && <Attributes attributes={attributes} />}
+
+            <div className="extdata">
+              <ul>
+                <li>rarity:{extdata.rarity}</li>
+                <li>sex:{extdata.sex}</li>
+                <li>age:{extdata.age}</li>
+                <li>physicalAttack:{extdata.physicalAttack}</li>
+                <li>magicAttack:{extdata.magicAttack}</li>
+                <li>physicalDefense:{extdata.physicalDefense}</li>
+                <li>magicDefense:{extdata.magicDefense}</li>
+              </ul>
+            </div>
           </div>
-          {isAnyApprovedAccount && (
-            <Addresses list={approvedAccounts} onAddressClick={onRevokeButtonClick} isOwner={isOwner} />
-          )}
+          {isAnyApprovedAccount && <Addresses list={approvedAccounts} onAddressClick={onRevokeButtonClick} isOwner={isOwner} />}
         </section>
       </div>
     </>
