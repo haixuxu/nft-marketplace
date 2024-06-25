@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  justify-content: space-evenly;
 
   li {
     margin: 10px;
@@ -33,7 +34,7 @@
   width: 36px;
   height: 36px;
   right: 10px;
-  top: 10px;
+  bottom: -38px;
 //   z-index: 9999;
   text-align: center;
   line-height: 36px;

@@ -27,11 +27,7 @@ function Footer({ vara, isAlwaysMobile }: Props) {
     <footer className={cx(styles.footer, vara && styles.vara, isAlwaysMobile && styles.mobileFlexColumn)}>
       {/* TODO: should be wrapped in a container? */}
       <div className={cx(styles.column, isAlwaysMobile && styles.mobileFlexColumn)}>
-        <ul className={styles.socials}>{getSocials()}</ul>
-
-        <small className={cx(styles.copyright, vara && styles.vara)}>
-          &copy; {year} Gear Foundation, Inc. All Rights Reserved.
-        </small>
+      ©2024 bbk47. All Rights Reserved.
       </div>
 
       {account && (

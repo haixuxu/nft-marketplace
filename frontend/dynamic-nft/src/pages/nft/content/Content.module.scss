@@ -12,10 +12,8 @@
 
 .main {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  section {
-    width: 48%;
-  }
 }
 
 .details {
@@ -42,4 +40,14 @@
   & > *:not(:last-child) {
     margin-right: 30px;
   }
+}
+
+
+.attritem{
+  height: 36px;
+  line-height: 36px;
+}
+
+.dynamicUl{
+  padding: 10px 20px;
 }

@@ -1,20 +1,29 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './Menu.module.scss';
 
 function Menu() {
+  const calcClass = ({ isActive }: any) => (isActive ? styles.active : '');
   return (
     <ul className={styles.menu}>
       <li>
-        <Link to="/card_list">NFT Model</Link>
-      </li> <li>
-        <Link to="/create">Create NFT</Link>
+        <NavLink to="/" className={calcClass}>
+          NFT
+        </NavLink>
       </li>
       <li>
-        <Link to="/mint_ticket">AirDrop NFT Ticket</Link>
+        <NavLink to="/card_list" className={calcClass}>
+          Model
+        </NavLink>
       </li>
-
       <li>
-        <Link to="/playpage">Play Game</Link>
+        <NavLink to="/mint_ticket" className={calcClass}>
+          Ticket
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/playpage" className={calcClass}>
+          Game
+        </NavLink>
       </li>
     </ul>
   );

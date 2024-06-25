@@ -1,8 +1,16 @@
 .menu {
-  display: inline-flex;
+  display: flex;
   margin-right: auto;
+
+  li{
+    // width: 120px;
+  }
 
   & > *:not(:last-child) {
     margin-right: 32px;
   }
+
+}
+.active{
+  color: deepskyblue;
 }

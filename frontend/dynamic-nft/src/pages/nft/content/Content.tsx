@@ -54,15 +54,16 @@ console.log('extdata===',extdata);
             <Card heading="Description" text={description} />
             {attributes && <Attributes attributes={attributes} />}
 
-            <div className="extdata">
-              <ul>
-                <li>rarity:{extdata.rarity}</li>
-                <li>sex:{extdata.sex}</li>
-                <li>age:{extdata.age}</li>
-                <li>physicalAttack:{extdata.physicalAttack}</li>
-                <li>magicAttack:{extdata.magicAttack}</li>
-                <li>physicalDefense:{extdata.physicalDefense}</li>
-                <li>magicDefense:{extdata.magicDefense}</li>
+            <div>
+              <h3>dynamic data:</h3>
+              <ul className={styles.dynamicUl}>
+                <li className={styles.attritem}>rarity:{extdata.rarity}</li>
+                <li className={styles.attritem}>sex:{extdata.sex}</li>
+                <li className={styles.attritem}>age:{extdata.age}</li>
+                <li className={styles.attritem}>physicalAttack:{extdata.physicalAttack}</li>
+                <li className={styles.attritem}>magicAttack:{extdata.magicAttack}</li>
+                <li className={styles.attritem}>physicalDefense:{extdata.physicalDefense}</li>
+                <li className={styles.attritem}>magicDefense:{extdata.magicDefense}</li>
               </ul>
             </div>
           </div>

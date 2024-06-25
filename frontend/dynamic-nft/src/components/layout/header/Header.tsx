@@ -14,7 +14,6 @@ function Header({ isAccountVisible }: Props) {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <Logo />
         {account && <Menu />}
       </nav>
       {isAccountVisible && <Account />}

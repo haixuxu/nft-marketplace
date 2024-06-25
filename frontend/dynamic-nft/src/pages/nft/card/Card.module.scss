@@ -3,6 +3,7 @@
 .card {
   padding: 15px 20px;
   font-size: $fontSizeMedium;
+  min-width: 300px;
   border: 1px solid;
   border-image: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 85px) 1;
   border-radius: $borderRadius;
@@ -24,6 +25,8 @@
 .text {
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 280px;
+  white-space: nowrap;
 }
 
 .bold {
@@ -32,4 +35,5 @@
   font-size: 22px;
   line-height: 30px;
   text-align: center;
+
 }
