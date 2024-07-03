@@ -21,6 +21,7 @@ function Attributes({ register, fields, onRemoveButtonClick }: Props) {
             {...register(`attributes.${index}.value`, { required: true })}
           />
         </div>
+        <div  className={styles.iconbox}>
         {index !== 0 && (
           <Button
             icon={minus}
@@ -29,6 +30,7 @@ function Attributes({ register, fields, onRemoveButtonClick }: Props) {
             className={styles.button}
           />
         )}
+        </div>
       </div>
     ));
 

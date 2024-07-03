@@ -3,8 +3,12 @@
 
 .nft {
   @include card();
+  padding: 10px;
   display: block;
   height: 100%;
+}
+.nft:hover {
+  box-shadow: 10px -6px 43px 0px rgba(0, 0, 0, 0.75);
 }
 
 .image {

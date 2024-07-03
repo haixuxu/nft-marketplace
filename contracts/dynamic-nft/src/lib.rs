@@ -30,8 +30,8 @@ pub struct DynamicNft {
 
     pub name: String,
     pub description: String,
-    pub ref_admin: ActorId,
-    pub ref_contract: ActorId,
+    pub ref_admin: ActorId, // 
+    pub ref_contract: ActorId, // ERC20, 
     pub dynamic_data: HashMap<TokenId, NftDynamicInfo>,
 }
 
@@ -170,6 +170,8 @@ async unsafe fn main() {
             }
         }
         NFTAction::Upgrade { token_id } => {
+            // TODO 1. burn erc20 token 2. self NFT can upgrade
+            // msg:source
             let nft_ext_info = nft
                 .dynamic_data
                 .get_mut(&token_id)

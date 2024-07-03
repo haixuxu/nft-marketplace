@@ -28,7 +28,7 @@ function Home() {
 
   const getNFTs = () =>
     getList()?.map(({ id, name, media }) => (
-      <li key={id}>
+      <li key={id} className={styles.carditem}>
         <NFT id={id} name={name} media={media} />
       </li>
     ));

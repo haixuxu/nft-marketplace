@@ -25,7 +25,7 @@ pub struct TokenMetadata {
     // free-form description
     pub description: String,
     // URL to associated media, preferably to decentralized, content-addressed storage
-    pub media: String,
+    pub media: String, // ipfs id
     // URL to an off-chain JSON file with more info.
     pub reference: String,
 }

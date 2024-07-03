@@ -44,6 +44,22 @@
           height: 250px;
         }
       }
+      .formmain{
+        flex-direction: column-reverse;
+        align-items: center;
+        padding: 25px 15px;
+        
+      }
+      form{
+        // padding: 20px 0;
+        margin: 20px -10px;
+        label{
+          grid-template-columns: 3fr 7fr;
+          >span{
+            margin-right: 10px;
+          }
+        }
+      }
     }
   }
 }

@@ -108,8 +108,11 @@ function CreateForm() {
 
   return (
     <>
-      <h2 className={styles.heading}>Create NFT, tips: 铸造一个NFT需要一个{ticketInfo.name}代币</h2>
-      <div className={styles.main}>
+      <h2 className={styles.heading}>Create NFT</h2>
+      <div className={styles.tips}>
+      <h3>tips: 铸造一个NFT需要一个{ticketInfo.name}代币</h3>
+      </div>
+      <div className={`${styles.main} formmain`}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.item}>
             <Input label="Name" className={styles.input} {...register('name', { required: 'Name is required' })} />

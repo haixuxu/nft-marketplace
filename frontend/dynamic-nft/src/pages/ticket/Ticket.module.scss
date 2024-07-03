@@ -7,9 +7,7 @@
 }
 
 @mixin horizontalGap($gap) {
-  & > *:not(:last-child) {
-    margin-right: $gap;
-  }
+ 
 }
 
 .heading {
